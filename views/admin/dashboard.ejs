@@ -1,0 +1,50 @@
+<%-include('../header.ejs')%>
+
+<div class="container mt-5 py-5">
+    <!--   -->
+    <table class="table table-bordered table-striped mt-5 text-center">
+        <thead>
+            <tr>
+                <th colspan="8">Course Display</th>
+            </tr>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Course</th>
+                <th>Status</th>
+                <th>Comment</th>
+                <th>Action</th>
+                <th>Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% d.forEach((item , i)=>{ %>
+                <tr>
+                    <td><%= ++i %>.</td>
+                    <td><%= item.name %></td>
+                    <td><%= item.email %></td>
+                    <td><%= item.course %></td>
+                    <td><%= item.status %></td>
+                    <td>
+                        <form action="/update_status/<%= item._id %>" method="post">
+                            <textarea name="comment" class="form-control"></textarea>
+                            <input type="hidden" name="name" value="<%= item.name %>">
+                            <input type="hidden" name="email" value="<%= item.email %>">
+                    </td>
+                    <td>
+                        <button type="submit" name="status" class="btn btn-success" value="Approved">Approve</button>
+                        <button type="submit" name="status" class="btn btn-danger" value="Reject">Reject</button>
+                        </form>
+                    </td>
+                    <td>
+                        <a href="/course_view/<%= item._id %>" class="btn btn-primary">View</a>
+                        <a href="/course_edit/<%= item._id %>" class="btn btn-info">Edit</a>
+                        <a href="/course_delete/<%= item._id %>" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</div>
+<%-include('../footer.ejs')%>

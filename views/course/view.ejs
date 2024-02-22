@@ -1,0 +1,39 @@
+<%-include('../header.ejs')%>
+
+<div class="container mt-5 py-5">
+    <table class="table table-bordered table-striped mt-5 text-center">
+        <thead>
+            <tr>
+                <th colspan="9"><h3>Course View</h3></th>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>DOB</th>
+                <th>Gender</th>
+                <th>Address</th>
+                <th>Education</th>
+                <th>Course</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><%= d.name %></td>
+                <td><%= d.email %></td>
+                <td><%= d.phone %></td>
+                <td><%= d.dob %></td>
+                <td><%= d.gender %></td>
+                <td><%= d.address %></td>
+                <td><%= d.education %></td>
+                <td><%= d.course %></td>
+                <td>
+                    <a href="/course_edit/<%= d._id %>" class="btn btn-info">Edit</a>
+                    <a href="/course_delete/<%= d._id %>" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<%-include('../footer.ejs')%>

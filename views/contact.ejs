@@ -1,0 +1,69 @@
+<%-include('./header.ejs')%>
+
+    <!-- Contact Us -->
+    <section id="contact">
+        <div class="container">
+            <div class="py-5 text-center">
+                <h2 class="mt-5 pt-5">Know More</h2>
+                <p class="lead">We are available to assist you anytime.</p>
+            </div>
+
+            <div class="row g-5">
+                <div class="col-md-5 col-lg-4 order-md-last">
+                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                        <span>Location</span>
+                    </h4>
+                    <iframe title=""
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d114566.12366376573!2d78.05655149726559!3d26.190452499999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3976c38cbfab5ebd%3A0x32bb0d277b5bc9d8!2sMaharana%20Pratap%20College%20of%20Technology%2C%20Gwalior!5e0!3m2!1sen!2sin!4v1698776631524!5m2!1sen!2sin"
+                        width="100%" height="50%" style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+
+                <div class="col-md-7 col-lg-8">
+                    <h4 class="mb-3">Contact Us!</h4>
+                    <form action="/contactUs/<%= d._id %>" method="post">
+                        <div class="row g-3 paddingValue">
+                            <div class="col-sm-6">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control" value="<%= n %>"  placeholder="Enter Your Name">
+                            </div>
+
+                            <div class="col-sm-6">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="text" class="form-control" value="<%= e %>" placeholder="youremail@example.com">
+                            </div>
+
+                            <div class="col-sm-6">
+                                <label for="phone" class="form-label">Phone No.</label>
+                                <input type="number" class="form-control" value="<%= d.phone %>" placeholder="Enter Your Phone No.">
+                            </div>
+
+                            <div class="col-sm-6">
+                                <label for="" class="form-label">Course</label>
+                                <input type="text" value="<%= d.course %>" name="course" class="form-control" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="">Description :</label>
+                                <textarea name="description" class="form-control" placeholder="Describe Your Problem!!"></textarea>
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <div class="form-check paddingValue">
+                            <input type="checkbox" class="form-check-input" id="save-info">
+                            <label class="form-check-label" for="save-info">Save this information for next time</label>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Contact Us -->
+
+<%-include('./footer.ejs')%>
