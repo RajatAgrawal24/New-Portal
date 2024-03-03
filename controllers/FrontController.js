@@ -4,6 +4,9 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const CourseModel = require('../models/course')
 
+const nodemailer = require('nodemailer');
+const randomstring = require('randomstring');
+
 const cloudinary = require("cloudinary").v2
 cloudinary.config({ 
   cloud_name: 'dmtgrirpq', 
@@ -55,6 +58,28 @@ class FrontController {
             res.render('contact',{n:name , e:email , d:data , i:image});
         }catch(err){
             console.log(err);
+        }
+    }
+    static forgetPasswordVerify = async (req, res) => {
+        try {
+          const { email } = req.body;
+          const userData = await UserModel.findOne({ email: email });
+          //console.log(userData)
+          if (userData) {
+            const randomString = randomstring.generate();
+            await UserModel.updateOne(
+              { email: email },
+              { $set: { token: randomString } }
+            );
+            this.sendEmail(userData.name, userData.email, randomString);
+            req.flash("success", "Check your mail to Reset your Password!");
+            res.redirect("/");
+          } else {
+            req.flash("error", "This is not a Registered Email , Please Register");
+            res.redirect("/register");
+          }
+        } catch (error) {
+          console.log(error);
         }
     }
     static userinsert = async (req, res) => {
@@ -227,6 +252,33 @@ class FrontController {
             console.log(err);
         }
     }
+
+    static sendEmail = async (name, email, token) => {
+        // console.log(name,email,status,comment)
+        // connenct with the smtp server
+    
+        let transporter = await nodemailer.createTransport({
+          host: "smtp.gmail.com",
+          port: 587,
+    
+          auth: {
+            user: "rag7731@gmail.com",
+            pass: "mkbztxzzuczdrkpq",
+          },
+        });
+        let info = await transporter.sendMail({
+          from: "test@gmail.com", // sender address
+          to: email, // list of receivers
+          subject: "Reset Password", // Subject line
+          text: "hello", // plain text body
+          html:
+            "<p>Hii " +
+            name +
+            ',Please click here to <a href="http://localhost:4000/reset-password?token=' +
+            token +
+            '">Reset</a> your Password.',
+        });
+    };
 }
 
 module.exports = FrontController;

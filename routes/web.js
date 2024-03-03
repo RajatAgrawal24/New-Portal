@@ -15,6 +15,8 @@ route.get('/home',checkUserAuth ,FrontController.home)
 route.get('/about',checkUserAuth ,FrontController.about)
 route.get('/contact',checkUserAuth ,FrontController.contact)
 
+route.post('/forgotPassword' , FrontController.forgetPasswordVerify)
+
 route.post('/contactUs/:id',checkUserAuth ,ContactController.contactUs)
 
 
