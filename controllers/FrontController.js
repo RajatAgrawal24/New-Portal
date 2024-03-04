@@ -82,6 +82,33 @@ class FrontController {
           console.log(error);
         }
     }
+    static resetPassword = async (req, res) => {
+        try {
+          const token = req.query.token;
+          const tokenData = await UserModel.findOne({ token: token });
+          if (tokenData) {
+            res.render("resetPassword", { user_id: tokenData._id });
+          } else {
+            res.render("404");
+          }
+        } catch (error) {
+          console.log(error);
+        }
+    }
+    static reset_Password1 = async (req, res) => {
+        try {
+        const { password, user_id } = req.body;
+        const newHashPassword = await bcrypt.hash(password, 10);
+        await UserModel.findByIdAndUpdate(user_id, {
+            password: newHashPassword,
+            token: "",
+        });
+        req.flash("success", "Reset Password Updated successfully ");
+        res.redirect("/");
+        } catch (error) {
+        console.log(error);
+        }
+    }
     static userinsert = async (req, res) => {
         try{
             //To upload Image on Cloud

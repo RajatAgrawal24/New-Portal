@@ -16,6 +16,8 @@ route.get('/about',checkUserAuth ,FrontController.about)
 route.get('/contact',checkUserAuth ,FrontController.contact)
 
 route.post('/forgotPassword' , FrontController.forgetPasswordVerify)
+route.get('/reset-password',FrontController.resetPassword)
+route.post('/reset_Password1',FrontController.reset_Password1)
 
 route.post('/contactUs/:id',checkUserAuth ,ContactController.contactUs)
 
