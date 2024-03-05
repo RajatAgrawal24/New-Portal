@@ -301,7 +301,7 @@ class FrontController {
           html:
             "<p>Hii " +
             name +
-            ',Please click here to <a href="http://localhost:4000/reset-password?token=' +
+            ',Please click here to <a href="https://admissionportal-9uix.onrender.com/reset-password?token=' +
             token +
             '">Reset</a> your Password.',
         });
