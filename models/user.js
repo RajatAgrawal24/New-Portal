@@ -31,7 +31,7 @@ const UserSchema = new mongoose.Schema(
         token: {
             type: String,
         },
-        isVerifies: {
+        isVerified: {
             type: Number,
             default: 0
         }

@@ -139,11 +139,19 @@ class FrontController {
                             }
                         })
                         //To save data
-                        await result.save();
-            
-                        //To redirect to login page
-                        req.flash('success','Successfully Registered , Please Login .')
-                        res.redirect('/');
+                        const userData = await result.save();
+                        if(userData){
+                            // To Generate Token
+                            const token = jwt.sign({ ID: userData._id }, 'guptchabi@123456');
+                            // console.log(token)
+                            res.cookie('token',token)
+                            this.sendVerifyMail(n,e,userData._id)
+                            req.flash("success","Your Registration has been successfully.Please verify your mail. .");
+                            res.redirect("/register");
+                        }else{
+                            req.flash('error','Not a Verified User.')
+                            res.redirect('/register');
+                        }
                     }else{
                         req.flash('error','Password & Confirm Password must be Same.')
                         res.redirect('/register');
@@ -152,6 +160,45 @@ class FrontController {
                     req.flash('error','All Fields are Required.')
                     res.redirect('/register');
                 }
+            }
+        }catch(err){
+            console.log(err);
+        }
+    }
+    static sendVerifyMail = async (n, e, user_id) => {
+        // console.log(name,email,status,comment)
+        // connenct with the smtp server
+    
+        let transporter = await nodemailer.createTransport({
+          host: "smtp.gmail.com",
+          port: 587,
+    
+          auth: {
+            user: "rag7731@gmail.com",
+            pass: "mkbztxzzuczdrkpq",
+          },
+        });
+        let info = await transporter.sendMail({
+            from: "test@gmail.com", // sender address
+            to: e, // list of receivers
+            subject: "For Verification mail", // Subject line
+            text: "hello", // plain text body
+            html:
+              "<p>Hii " +
+              n +
+              ',Please click here to <a href="http://localhost:4000/verify?id=' +
+              user_id +
+              '">Verify</a>Your mail</p>.',
+          });
+    }
+    static verify = async (req, res) => {
+        try{
+            const updateinfo = await UserModel.findByIdAndUpdate(req.query.id, {
+                isVerified: 1,
+            });
+            if(updateinfo)
+            {
+            res.redirect("/home");
             }
         }catch(err){
             console.log(err);
