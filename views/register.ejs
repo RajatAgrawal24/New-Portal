@@ -42,9 +42,14 @@
                         <!-- Heading (Register Here) -->
                         <h1 class="mb-5 text-center">Fulfill Your Dreams !!</h1>
                         <% if(message.length > 0){ %>
-                            <div class="alert alert-danger">
+                            <div class="alert alert-success">
                                 <!-- To Print -->
                                 <%= message %>
+                            </div>
+                        <% } %>
+                        <% if(msg.length > 0){ %>
+                            <div class="alert alert-danger">
+                                <%= msg %>
                             </div>
                         <% } %>
 

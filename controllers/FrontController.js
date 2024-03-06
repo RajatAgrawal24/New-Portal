@@ -24,7 +24,7 @@ class FrontController {
     }
     static register = async (req, res) => {
         try{
-            res.render('register',{message:req.flash('error')});
+            res.render('register',{message:req.flash('success'),msg:req.flash('error')});
         }catch(err){
             console.log(err);
         }
@@ -146,7 +146,7 @@ class FrontController {
                             // console.log(token)
                             res.cookie('token',token)
                             this.sendVerifyMail(n,e,userData._id)
-                            req.flash("success","Your Registration has been successfully.Please verify your mail. .");
+                            req.flash("success","Successfully Registered , Please Verify your Email.");
                             res.redirect("/register");
                         }else{
                             req.flash('error','Not a Verified User.')
@@ -178,7 +178,7 @@ class FrontController {
             pass: "mkbztxzzuczdrkpq",
           },
         });
-        let info = await transporter.sendMail({
+        await transporter.sendMail({
             from: "test@gmail.com", // sender address
             to: e, // list of receivers
             subject: "For Verification mail", // Subject line
@@ -186,10 +186,10 @@ class FrontController {
             html:
               "<p>Hii " +
               n +
-              ',Please click here to <a href="http://localhost:4000/verify?id=' +
+              ',Please click here to <a href="https://admissionportal-9uix.onrender.com/verify?id=' +
               user_id +
               '">Verify</a>Your mail</p>.',
-          });
+        })
     }
     static verify = async (req, res) => {
         try{
