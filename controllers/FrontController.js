@@ -110,61 +110,64 @@ class FrontController {
         }
     }
     static userinsert = async (req, res) => {
-        try{
-            //To upload Image on Cloud
-            // console.log(req.files.image)
-            const file = req.files.image
-            const imageUpload = await cloudinary.uploader.upload(file.tempFilePath , {
-                folder: 'userProfile'
-            })
-            // console.log(imageUpload)
-
-            const {n,e,p,cp} = req.body;
-            const user = await UserModel.findOne({email: e})
-            // console.log(user)
-            if(user){
-                req.flash('error','Email Already Exists.')
+        try {
+            let imageUpload = null; // Set default value for image upload
+    
+            // To upload Image on Cloud if an image is uploaded
+            if (req.files && req.files.image) {
+                const file = req.files.image;
+                imageUpload = await cloudinary.uploader.upload(file.tempFilePath, {
+                    folder: 'userProfile'
+                });
+            }
+    
+            const { n, e, p, cp } = req.body;
+            const user = await UserModel.findOne({ email: e });
+    
+            if (user) {
+                req.flash('error', 'Email Already Exists.');
                 res.redirect('/register');
-            }else{
-                if(n && e && p && cp){
-                    if(p == cp){
-                        const hashPassword = await bcrypt.hash(p,10);
+            } else {
+                if (n && e && p && cp) {
+                    if (p == cp) {
+                        const hashPassword = await bcrypt.hash(p, 10);
                         const result = new UserModel({
-                            name:n,
-                            email:e,
-                            password:hashPassword,
-                            image:{
-                                public_id:imageUpload.public_id,
-                                url:imageUpload.secure_url
+                            name: n,
+                            email: e,
+                            password: hashPassword,
+                            image: {
+                                public_id: imageUpload ? imageUpload.public_id : 'userProfile/ogjhqekpvgaoknrunb4y',
+                                url: imageUpload ? imageUpload.secure_url : 'https://res.cloudinary.com/dmtgrirpq/image/upload/v1709919759/userProfile/ogjhqekpvgaoknrunb4y.webp'
                             }
-                        })
-                        //To save data
+                        });
+    
+                        // To save data
                         const userData = await result.save();
-                        if(userData){
+                        if (userData) {
                             // To Generate Token
                             const token = jwt.sign({ ID: userData._id }, 'guptchabi@123456');
-                            // console.log(token)
-                            res.cookie('token',token)
-                            this.sendVerifyMail(n,e,userData._id)
-                            req.flash("success","Successfully Registered , Please Verify your Email.");
+                            res.cookie('token', token);
+                            this.sendVerifyMail(n, e, userData._id);
+                            req.flash("success", "Successfully Registered, Please Verify your Email.");
                             res.redirect("/register");
-                        }else{
-                            req.flash('error','Not a Verified User.')
+                        } else {
+                            req.flash('error', 'Not a Verified User.');
                             res.redirect('/register');
                         }
-                    }else{
-                        req.flash('error','Password & Confirm Password must be Same.')
+                    } else {
+                        req.flash('error', 'Password & Confirm Password must be Same.');
                         res.redirect('/register');
                     }
-                }else{
-                    req.flash('error','All Fields are Required.')
+                } else {
+                    req.flash('error', 'All Fields are Required.');
                     res.redirect('/register');
                 }
             }
-        }catch(err){
+        } catch (err) {
             console.log(err);
         }
     }
+    
     static sendVerifyMail = async (n, e, user_id) => {
         // console.log(name,email,status,comment)
         // connenct with the smtp server
