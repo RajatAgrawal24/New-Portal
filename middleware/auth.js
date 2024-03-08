@@ -13,8 +13,13 @@ const checkUserAuth = async (req,res,next) => {
         // console.log(verifyLogin)
         const data = await userModel.findOne({_id:verifyLogin.ID})
         // console.log(data)
-        req.userData = data
-        next();
+        if(!(data.isVerified==1)) {
+            req.flash('error', 'Please Verify your Email First')
+            res.redirect('/')
+        }else{
+            req.userData = data
+            next();
+        }
     }
 }
 
