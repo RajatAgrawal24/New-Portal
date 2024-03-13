@@ -4,9 +4,9 @@ const nodemailer = require('nodemailer');
 class AdminController {
     static dashboard = async (req, res) => {
         try {
-            const {name , image} = req.userData
+            const {name , image , role} = req.userData
             const data = await CourseModel.find()
-            res.render("admin/dashboard" , {n:name,i:image ,d:data})
+            res.render("admin/dashboard" , {n:name,i:image ,d:data , r:role})
         }catch(err) {
             console.error(err);
         }

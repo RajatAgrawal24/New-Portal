@@ -31,31 +31,32 @@ class FrontController {
     }
     static home = async (req, res) => {
         try{
-            const {name , image , email , id , course} = req.userData;
+            const {name , image , email , id , role} = req.userData;
 
             const btech = await CourseModel.findOne({user_id:id , course:'btech'})
             const bca = await CourseModel.findOne({user_id:id , course:'bca'})
             const mca = await CourseModel.findOne({user_id:id , course:'mca'})
 
-            res.render('home',{n:name , i:image , e:email , btech:btech , bca:bca , mca:mca});
+            res.render('home',{n:name , i:image , e:email , r:role , btech:btech , bca:bca , mca:mca});
         }catch(err){
             console.log(err);
         }
     }
     static about = async (req, res) => {
         try{
-            const {name , image} = req.userData;
-            res.render('about',{n:name , i:image});
+            const {name , image , role} = req.userData;
+            res.render('about',{n:name , i:image , r:role});
         }catch(err){
             console.log(err);
         }
     }
     static contact = async (req, res) => {
         try{
-            const {name , email , image , id} = req.userData;
-            const data = await CourseModel.findOne({user_id:id})
+            // console.log(req.userData)
+            const {name , email , image , _id , role} = req.userData;
+            const data = await UserModel.findOne({_id:_id})
             // console.log(data);
-            res.render('contact',{n:name , e:email , d:data , i:image});
+            res.render('contact',{n:name , e:email , d:data, r:role , i:image});
         }catch(err){
             console.log(err);
         }
@@ -220,12 +221,16 @@ class FrontController {
                     res.cookie('token',token)
 
                     //Admin Login
-                    if(user.role==='admin'){
+                    if(user.role==='admin' && user.isVerified == 1){
                         res.redirect('/admin/dashboard')
                     }
                     //User login
-                    else{
+                    else if(user.role==='user' && user.isVerified == 1){
                         res.redirect('/home')
+                    }
+                    else {
+                        req.flash('error', 'Please Verify your Email First')
+                        res.redirect('/')
                     }
                 }else{
                     req.flash('error','Email or Password is Not Correct.')
