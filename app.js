@@ -54,7 +54,7 @@ const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 passport.use(new GoogleStrategy({
   clientID: '46650854774-po0f95t7mhtgkkpmvpnd3fhgaudlicv0.apps.googleusercontent.com',
   clientSecret: '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',
-  callbackURL: "http://localhost:4000/auth/google/callback",
+  callbackURL: "https://admissionportal-9uix.onrender.com/auth/google/callback",
 }, async (accessToken, refreshToken, profile, done) => {
   try {
     // console.log(profile)
