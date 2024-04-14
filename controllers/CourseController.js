@@ -84,10 +84,10 @@ class CourseController {
 
     static courseDelete = async (req,res)=>{
         try{
-            const {name , image } = req.userData
+            const {name , image ,role} = req.userData
             const data = await CourseModel.findByIdAndDelete(req.params.id)
             req.flash('success','Course Deleted Successfully')
-            if(user.role==='admin'){
+            if(role==='admin'){
                 res.redirect('/admin/dashboard')
             }else{
                 res.redirect('/course_display')
