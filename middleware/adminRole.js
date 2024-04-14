@@ -6,7 +6,7 @@ const authRole = (roles) => {
         if (!roles.includes(req.userData.role)) {
             res.redirect('/home');
         }
-        // next();
+        next();
     };
 };
 
