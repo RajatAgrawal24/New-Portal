@@ -28,10 +28,10 @@ class CourseController {
 
     static courseDisplay = async (req,res)=>{
         try{
-            const {name , image ,id} = req.userData
+            const {name , image ,id,role} = req.userData
             const data = await CourseModel.find({user_id:id})
             // console.log(data)
-            res.render('course/display',{n:name , i:image , d:data , msg:req.flash('success')})
+            res.render('course/display',{n:name , i:image , d:data , r:role, msg:req.flash('success')})
         }catch(err){
             console.log(err)
         }
@@ -40,10 +40,10 @@ class CourseController {
     static courseView = async (req,res)=>{
         try{
             // console.log(req.params.id)
-            const {name , image } = req.userData
+            const {name , image ,role} = req.userData
             const data = await CourseModel.findById(req.params.id)
             // console.log(data)
-            res.render('course/view',{n:name , i:image , d:data})
+            res.render('course/view',{n:name , i:image ,r:role, d:data})
         }catch(err){
             console.log(err)
         }
@@ -52,10 +52,10 @@ class CourseController {
     static courseEdit = async (req,res)=>{
         try{
             // console.log(req.params.id)
-            const {name , image } = req.userData
+            const {name , image ,role} = req.userData
             const data = await CourseModel.findById(req.params.id)
             // console.log(data)
-            res.render('course/edit',{n:name , i:image , d:data})
+            res.render('course/edit',{n:name , i:image , r:role , d:data})
         }catch(err){
             console.log(err)
         }
@@ -87,7 +87,11 @@ class CourseController {
             const {name , image } = req.userData
             const data = await CourseModel.findByIdAndDelete(req.params.id)
             req.flash('success','Course Deleted Successfully')
-            res.redirect('/course_display')
+            if(user.role==='admin'){
+                res.redirect('/admin/dashboard')
+            }else{
+                res.redirect('/course_display')
+            }
         }catch(err){
             console.log(err)
         }

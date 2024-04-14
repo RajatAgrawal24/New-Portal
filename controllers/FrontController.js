@@ -255,8 +255,8 @@ class FrontController {
     }
     static profile = async (req, res) => {
         try{
-            const {name,image,email,id} = req.userData;
-            res.render('profile',{n:name , i:image , e:email , id:id , message:req.flash('success'),msg:req.flash('error')});
+            const {name,image,email,id,role} = req.userData;
+            res.render('profile',{n:name , i:image , e:email , id:id , r:role , message:req.flash('success'),msg:req.flash('error')});
         }catch(err){
             console.log(err);
         }
